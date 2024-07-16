@@ -8,11 +8,11 @@ export const trasactionValidator = yup.object({
 });
 
 export const categoriesViseTransactionValidator = yup.object({
-  start: yup.date().required(),
-  end: yup.date().required(),
+  start: yup.number().required(),
+  end: yup.number().required(),
 });
 
 export const startTransactionValidator = yup.object({
-  start: yup.date(),
-  end: yup.date(),
+  start: yup.number(),
+  end: yup.number(),
 });

@@ -746,8 +746,8 @@ Retrieves all transactions within a date range.
 - **Request**: 
   - `GET /transactions`
   - Query Params:
-    - `start`: `date`
-    - `end`: `date`
+    - `start`: `number`
+    - `end`: `number`
 
 - **Response**:
   - Success:
@@ -864,8 +864,8 @@ Retrieves transactions grouped by categories within a date range.
   - Body:
     ```json
     {
-      "start": "date",
-      "end": "date"
+      "start": "number",
+      "end": "number"
     }
     ```
 

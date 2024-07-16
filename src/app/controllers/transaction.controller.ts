@@ -63,15 +63,14 @@ export class TransactionController {
       );
       const query: Query = {};
       if (start) {
-        query.updatedAt = { $gte: new Date(start) };
+        query.updatedAt = { $gte: new Date(start * 1000) };
       }
       if (end) {
         if (!query.updatedAt) {
           query.updatedAt = {};
         }
-        query.updatedAt.$lte = new Date(end);
+        query.updatedAt.$lte = new Date(end * 1000);
       }
-      console.log(query);
       const transactions = await Transaction.find(query);
       if (!transactions) {
         return next(new NotFoundException("Transaction"));
@@ -162,12 +161,13 @@ export class TransactionController {
       const { start, end } = await categoriesViseTransactionValidator.validate(
         req.body
       );
+
       const transactions = await Transaction.aggregate([
         {
           $match: {
             updatedAt: {
-              $gte: new Date(start),
-              $lte: new Date(end),
+              $gte: new Date(start * 1000),
+              $lte: new Date(end * 1000),
             },
           },
         },
