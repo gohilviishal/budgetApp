@@ -57,6 +57,30 @@ Handles user login.
     - `InvalidException`: Password is incorrect.
     - Validation errors.
 
+### `generateOtp(req: Request, res: Response, next: NextFunction): Promise<void>`
+
+Generates an OTP for a user and sends it via email.
+
+- **Request**:
+  - `POST /generate-otp`
+  - Body:
+    ```json
+    {
+      "email": "string"
+    }
+    ```
+
+- **Response**:
+  - Success:
+    ```json
+    {
+      "message": "OTP sent successfully"
+    }
+    ```
+  - Errors:
+    - Validation errors.
+    - Error sending OTP.
+
 ### `updateProfile(req: Request, res: Response, next: NextFunction): Promise<void>`
 
 Handles user profile updates.
@@ -91,6 +115,31 @@ Handles user profile updates.
     ```
   - Errors:
     - `NotFoundException`: User not found.
+    - Validation errors.
+
+### `verifyOtp(req: Request, res: Response, next: NextFunction): Promise<void>`
+
+Verifies the OTP for a user.
+
+- **Request**:
+  - `POST /verify-otp`
+  - Body:
+    ```json
+    {
+      "email": "string",
+      "otp": "string"
+    }
+    ```
+
+- **Response**:
+  - Success:
+    ```json
+    {
+      "message": "OTP verified successfully"
+    }
+    ```
+  - Errors:
+    - `InvalidException`: Invalid OTP.
     - Validation errors.
 
 ## Validators

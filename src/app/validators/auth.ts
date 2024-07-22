@@ -12,6 +12,15 @@ export const loginValidator = yup.object({
   password: yup.string().required(),
 });
 
+export const otpValidator = yup.object({
+  email: yup.string().trim().email().required(),
+});
+
+export const otpVerifyValidator = yup.object({
+  email: yup.string().trim().email().required(),
+  otp: yup.string().trim().required(),
+});
+
 export const profileValidator = yup.object({
   gender: yup.string().trim().oneOf(Object.values(Gender)).required(),
   DOB: yup.date().required(),
