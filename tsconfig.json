@@ -18,7 +18,8 @@
       "#helpers/*": ["helpers/*"],
       "#config": ["config"],
       "#database": ["database"]
-    }
+    },
+    "types":["node"]
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "tests", "commands"],
