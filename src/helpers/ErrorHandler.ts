@@ -1,6 +1,6 @@
 import { Response } from "express";
-import mongoose from "mongoose";
 import { MongoServerError } from "mongodb";
+import mongoose from "mongoose";
 import { ValidationError } from "yup";
 
 export class ErrorHandler extends Error {
@@ -56,8 +56,14 @@ export const handleError = (err: ErrorHandler, res: Response) => {
   if (err instanceof ValidationError) {
     return res.status(422).json({ error: err.message });
   }
-  if (err instanceof MongoServerError) {
-    return res.status(400).json({ error: err.errorResponse.errmsg });
+  if (err.code === 11000) {
+    return res
+      .status(400)
+      .json({
+        error: `Already exists ${Object.keys(err.errorResponse.keyValue).join(
+          ", "
+        )}`,
+      });
   }
   res.status(status).json({
     error: message,

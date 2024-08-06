@@ -9,7 +9,7 @@ export default (app: Application): void => {
   // Health Check endpoints
   app.use(
     cors({
-      //   origin: [config.appUrl, "http://localhost:5173"],
+      origin: [ "http://localhost:5173"],
     })
   );
 

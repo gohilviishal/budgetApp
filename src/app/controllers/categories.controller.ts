@@ -1,4 +1,8 @@
-import { ExistException, NotFoundException } from "#helpers/ErrorHandler";
+import {
+  ExistException,
+  InvalidException,
+  NotFoundException,
+} from "#helpers/ErrorHandler";
 import Category from "app/models/categories.model";
 import { categoriesValidator } from "app/validators/categories";
 import { NextFunction, Request, Response } from "express";
@@ -34,11 +38,38 @@ export class CategoriesController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const categories = await Category.find({});
-      if (!categories) {
+      const { page = 1, perPage = 50 } = req.query;
+
+      const pageNumber = Number(page);
+      const perPageNumber = Number(perPage);
+
+      if (isNaN(pageNumber) || pageNumber <= 0) {
+        return next(new InvalidException("Page Number"));
+      }
+      if (isNaN(perPageNumber) || perPageNumber <= 0) {
+        return next(new InvalidException("Per Page Number"));
+      }
+      const skip = (pageNumber - 1) * perPageNumber;
+
+      const [categories, total] = await Promise.all([
+          Category.find({})
+          // .sort({ updatedAt: -1 })                                                                                                                                                    
+          .skip(skip)
+          .limit(perPageNumber),
+        Category.countDocuments(),
+      ]);
+      if (!categories.length) {
         return next(new NotFoundException("Categories"));
       }
-      res.status(200).json({ data: categories });
+      res.status(200).json({
+        data: categories,
+        pagination: {
+          page: pageNumber,
+          perPage: perPageNumber,
+          totalItems: total,
+          totalPages: Math.ceil(total / perPageNumber),
+        },
+      });
     } catch (error) {
       next(error);
     }
